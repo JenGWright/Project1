@@ -3,10 +3,12 @@ package org.example.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import org.example.Exception.ProductException;
 import org.example.Model.Product;
 import org.example.Model.Seller;
 import org.example.Service.ProductService;
 import org.example.Service.SellerService;
+import org.example.Exception.SellerException;
 
 import java.util.List;
 
@@ -38,7 +40,9 @@ public class ProductController {
                 Seller s = om.readValue(context.body(), Seller.class);
                 sellerService.addSeller(s);
                 context.status(201);
-            }catch(JsonProcessingException e){
+            }catch(JsonProcessingException | SellerException e){
+                e.printStackTrace();
+                context.result(e.getMessage());
                 context.status(400);
             }
         });
@@ -50,6 +54,10 @@ public class ProductController {
                 context.status(201);
                 context.json(newProduct);
             }catch(JsonProcessingException e){
+                context.result(e.getMessage());
+                context.status(400);
+            }catch(ProductException e){
+                context.result(e.getMessage());
                 context.status(400);
             }
         });
@@ -64,6 +72,33 @@ public class ProductController {
                 context.status(200);
             }
         });
+        api.delete("product/{id}", context -> {
+            long id = Long.parseLong(context.pathParam("id"));
+            Product p = productService.getProductById(id);
+            if(p == null){
+                context.status(404);
+                context.result("Product ID entered was not found.");
+            }else {
+                productService.deleteProductByID(id);
+                context.json(p);
+                context.status(200);
+                context.result("Product deleted");
+            }
+        });
+
+        api.put("product/{id}", context -> {
+
+            long id = Long.parseLong(context.pathParam("id"));
+            ObjectMapper om = new ObjectMapper();
+            Product updatedProduct = om.readValue(context.body(), Product.class);
+
+            productService.updateProduct(id, updatedProduct);
+
+            context.status(200);
+            context.result("Product was updated");
+        });
+
+
         return api;
 
     }
