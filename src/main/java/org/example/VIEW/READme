@@ -1,0 +1,21 @@
+CRUD functionality on Product
+	GET/products/all products
+	GET/product/{ID} - Get a single product
+		Get a single product
+		We should get a 404 error when we try to access a non-existed product
+	POST/product/ Add a single product
+		Product ids should be non-null and unique
+		Product names should be non-null
+		Prices should be over 0
+		Seller name should refer to an actually existing seller
+	PUT/product{id} - update a single product
+		Product names should be non-null
+		Prices should be over 0
+		Seller name should refer to an actually existing seller
+	DELETE/product/{id} - Delete a single product
+		Delete should always return 200, regardless of it the item existed at the start or not.
+Create/Read functionality on Seller
+	GET/seller/ - all sellers
+	POST/seller/where seller names must be non-null & unique
+
+Unit testing of service classes

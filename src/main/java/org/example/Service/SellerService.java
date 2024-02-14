@@ -1,6 +1,7 @@
 package org.example.Service;
 
 import org.example.Exception.SellerException;
+import org.example.Main;
 import org.example.Model.Seller;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class SellerService {
     }
 
     public void addSeller(Seller newSeller) throws SellerException {
+        Main.log.info("Add: Adding a seller");
         for (Seller existing : sellerList) {
             System.out.println("Existing: " + existing.getName());
             if (existing.getName().equals(newSeller.getName())){

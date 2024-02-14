@@ -1,6 +1,7 @@
 package org.example.Service;
 
 import org.example.Exception.ProductException;
+import org.example.Main;
 import org.example.Model.Product;
 import org.example.Model.Seller;
 
@@ -21,8 +22,13 @@ public class ProductService {
     }
 
     public Product addProduct(Product p) throws ProductException {
+        Main.log.info ("ADD - Attempting to add a Product");
+
         if(p.getProductName() == null || p.getSellerName() == null){
             throw new ProductException("Product name and seller name fields must not be null");
+        }
+        if (p.getProductPrice() == 0){
+            throw new ProductException("Price can not be 0");
         }
 
         String sellerName = p.getSellerName();
